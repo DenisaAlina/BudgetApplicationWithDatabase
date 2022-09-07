@@ -20,7 +20,7 @@ public class TransactionController {
     List<Transaction> getTransactions(@RequestParam(required = false) String type,
                                       @RequestParam(required = false) Double minAmount,
                                       @RequestParam(required = false) Double maxAmount) {
-       return transactionService.getTransactions(type, minAmount, maxAmount );
+        return transactionService.getTransactions(type, minAmount, maxAmount);
     }
 
     @GetMapping("{id}")
@@ -40,9 +40,9 @@ public class TransactionController {
     }
 
     @PatchMapping("{id}")
-    void changingProductAndAmount(@PathVariable  Integer id,
-                                  @RequestParam  String type,
-                                  @RequestParam  Double amount){
+    void changingProductAndAmount(@PathVariable Integer id,
+                                  @RequestParam String type,
+                                  @RequestParam Double amount) {
         transactionService.changeTransaction(id, type, amount);
     }
 

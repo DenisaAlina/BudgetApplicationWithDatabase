@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
+
 @Component
 public class MemoryTransactionProvider implements TransactionProvider {
     public List<Transaction> getTransactions() {

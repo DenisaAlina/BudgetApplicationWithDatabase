@@ -17,35 +17,35 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
 
     public TransactionService(TransactionProvider transactionProvider, TransactionRepository transactionRepository) {
-        this.transactionRepository=transactionRepository;
+        this.transactionRepository = transactionRepository;
         transactionRepository.saveAll(transactionProvider.getTransactions());
     }
 
-    public List<Transaction>getTransactions(String type, Double minAmount, Double maxAmount){
+    public List<Transaction> getTransactions(String type, Double minAmount, Double maxAmount) {
 
-            if (type == null) {
-                if (minAmount == null) {
-                    if (maxAmount == null) {
-                        return getAll();
-                    } else {
-                        return getAllByMaxAmount(maxAmount);
-                    }
-                } else if (maxAmount == null) {
-                    return getAllByMinAmount(minAmount);
-                } else {
-                    return getAllByMinMAxAmount(minAmount, maxAmount);
-                }
-            } else if (minAmount == null) {
+        if (type == null) {
+            if (minAmount == null) {
                 if (maxAmount == null) {
-                    return getAllByType(type);
+                    return getAll();
                 } else {
-                    return getAllByTypeAndMaxAmount(type, maxAmount);
+                    return getAllByMaxAmount(maxAmount);
                 }
             } else if (maxAmount == null) {
-                return getAllByTypeAndMinAmount(type, minAmount);
+                return getAllByMinAmount(minAmount);
             } else {
-                return getAllByTypeAndMinMAxAmount(type, minAmount, maxAmount);
+                return getAllByMinMAxAmount(minAmount, maxAmount);
             }
+        } else if (minAmount == null) {
+            if (maxAmount == null) {
+                return getAllByType(type);
+            } else {
+                return getAllByTypeAndMaxAmount(type, maxAmount);
+            }
+        } else if (maxAmount == null) {
+            return getAllByTypeAndMinAmount(type, minAmount);
+        } else {
+            return getAllByTypeAndMinMAxAmount(type, minAmount, maxAmount);
+        }
 
     }
 
@@ -54,12 +54,11 @@ public class TransactionService {
     }
 
 
-
     public List<Transaction> getAllByType(String type) {
         return transactionRepository
                 .findByType(Type.fromStringToEnum(type))
-                .orElseThrow(()-> new ResourceNotFoundException("Transaction type not found"));
-            }
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction type not found"));
+    }
 
     public List<Transaction> getAllByMinAmount(Double minAmount) {
         return transactionRepository
@@ -81,22 +80,22 @@ public class TransactionService {
 
         return transactionRepository
                 .findByTypeAndAmountGreaterThan(Type.fromStringToEnum(type), min)
-                .orElseThrow(()->new ResourceNotFoundException("Transaction type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction type not found"));
     }
 
     public List<Transaction> getAllByTypeAndMaxAmount(String type, Double max) {
 
         return transactionRepository
                 .findByTypeAndAmountLessThan(Type.fromStringToEnum(type), max)
-                .orElseThrow(()->new ResourceNotFoundException("Transaction type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction type not found"));
 
-            }
+    }
 
     public List<Transaction> getAllByTypeAndMinMAxAmount(String type, Double min, Double max) {
 
         return transactionRepository
-                .findByTypeAndAmountBetween(Type.fromStringToEnum(type),min, max)
-                .orElseThrow(()->new ResourceNotFoundException("Transaction type not found"));
+                .findByTypeAndAmountBetween(Type.fromStringToEnum(type), min, max)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction type not found"));
 
     }
 
@@ -107,29 +106,29 @@ public class TransactionService {
     }
 
     public void saveTransaction(Transaction transaction) {
-         transactionRepository.save(transaction);
-        if (transaction== null) {
+        transactionRepository.save(transaction);
+        if (transaction == null) {
             throw new ResourceNotFoundException("Invalid input!");
         }
     }
 
-        public void replaceTransaction(Integer id,Transaction transaction){
-            transaction.setId(id);
-            transactionRepository.save(transaction);
-        }
+    public void replaceTransaction(Integer id, Transaction transaction) {
+        transaction.setId(id);
+        transactionRepository.save(transaction);
+    }
 
     public void changeTransaction(Integer id, String type, Double amount) {
         if (id == null || type == null || amount == null) {
             throw new ResourceNotFoundException("Invalid input!");
         }
-       Transaction transaction= transactionRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Invalid id!"));
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid id!"));
         transaction.setType(Type.fromStringToEnum(type));
         transaction.setAmount(amount);
         transactionRepository.save(transaction);
     }
 
     public void deleteTransaction(Integer id) {
-            transactionRepository.deleteById(id);
+        transactionRepository.deleteById(id);
 
     }
 
