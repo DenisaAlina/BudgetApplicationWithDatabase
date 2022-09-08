@@ -41,9 +41,9 @@ public class TransactionController {
 
     @PatchMapping("{id}")
     void changingProductAndAmount(@PathVariable Integer id,
-                                  @RequestParam String type,
+                                  @RequestParam String product,
                                   @RequestParam Double amount) {
-        transactionService.changeTransaction(id, type, amount);
+        transactionService.changeTransaction(id, product, amount);
     }
 
     @DeleteMapping("{id}")

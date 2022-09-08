@@ -117,12 +117,12 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public void changeTransaction(Integer id, String type, Double amount) {
-        if (id == null || type == null || amount == null) {
+    public void changeTransaction(Integer id, String product, Double amount) {
+        if (id == null || product == null || amount == null) {
             throw new ResourceNotFoundException("Invalid input!");
         }
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid id!"));
-        transaction.setType(Type.fromStringToEnum(type));
+        transaction.setProduct(product);
         transaction.setAmount(amount);
         transactionRepository.save(transaction);
     }
